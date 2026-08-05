@@ -1,5 +1,4 @@
-# LLM-From-Scratch-Notes-Easy-To-Understand
-# LLM From Scratch — Easy-to-Understand Notes
+# LLM From Scratch — Notes
 
 Welcome to my learning journey of understanding **Large Language Models (LLMs)** from first principles.
 
