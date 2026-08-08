@@ -2090,4 +2090,248 @@ Training Loop
     training.
 
 
+    ## What is BPE?
+
+Byte Pair Encoding (BPE) is a **subword tokenization algorithm** used by
+many modern LLMs (including GPT-family models).
+
+Instead of storing every word as a separate token, BPE builds a
+vocabulary consisting of: - Common words - Frequently occurring subwords
+
+## Rules
+
+### Rule 1
+
+Do **not** split frequently occurring words.
+
+Example:
+
+``` text
+boy -> ["boy"]
+```
+
+### Rule 2
+
+Split rare words into meaningful subwords.
+
+``` text
+boys -> ["boy", "s"]
+```
+
+## Why Subword Tokenization?
+
+### 1. Learns relationships
+
+Words like
+
+``` text
+token
+tokenizer
+tokenization
+```
+
+share common roots, helping the model generalize.
+
+### 2. Handles unseen words
+
+Words such as
+
+``` text
+modern
+modernize
+modernization
+```
+
+can be represented using familiar subwords instead of adding entirely
+new vocabulary entries.
+
+------------------------------------------------------------------------
+
+## Original Byte Pair Encoding
+
+Originally introduced as a compression algorithm.
+
+Algorithm:
+
+1.  Find the most frequent adjacent pair.
+2.  Replace it with a new symbol.
+3.  Repeat until the stopping criterion is reached.
+
+Example
+
+``` text
+aaabdaaabac
+```
+
+If **aa** is most frequent:
+
+``` text
+aaabdaaabac
+↓
+
+ZabdZabac
+```
+
+Continue merging until no useful merges remain.
+
+------------------------------------------------------------------------
+
+## BPE for LLMs
+
+For language models, BPE repeatedly merges the most frequent character
+pairs to create increasingly larger tokens.
+
+Result:
+
+-   Common words become single tokens.
+-   Rare words become multiple subword tokens.
+
+------------------------------------------------------------------------
+
+## Training a BPE Vocabulary
+
+Example corpus
+
+``` text
+old      : 7
+older    : 3
+finest   : 9
+lowest   : 4
+```
+
+### Step 1
+
+Append an end-of-word marker.
+
+``` text
+old</w>
+older</w>
+finest</w>
+lowest</w>
+```
+
+### Step 2
+
+Split every word into characters.
+
+``` text
+o l d </w>
+```
+
+### Step 3
+
+Count frequencies of adjacent symbol pairs.
+
+### Step 4
+
+Merge the most frequent pair.
+
+Repeat until:
+
+-   Desired vocabulary size is reached, or
+-   Maximum merge iterations are completed.
+
+------------------------------------------------------------------------
+
+## Vocabulary
+
+The final vocabulary may contain tokens like
+
+``` text
+old
+est
+ing
+tion
+lowest
+```
+
+instead of every possible English word.
+
+------------------------------------------------------------------------
+
+## tiktoken
+
+`tiktoken` is OpenAI's tokenizer library.
+
+Features:
+
+-   Fast BPE tokenizer
+-   Encoder
+-   Decoder
+-   Rust implementation for high performance
+
+------------------------------------------------------------------------
+
+# Creating Input--Target Pairs
+
+After tokenization, training examples are created using a sliding
+window.
+
+Token IDs
+
+``` text
+[11, 45, 82, 19, 6, 90]
+```
+
+Input
+
+``` text
+[11, 45, 82, 19, 6]
+```
+
+Target
+
+``` text
+[45, 82, 19, 6, 90]
+```
+
+Each target token is simply the **next token**.
+
+------------------------------------------------------------------------
+
+## Sliding Window
+
+``` text
+Input : This is an example
+Target: is an example sentence
+
+Input : is an example sentence
+Target: an example sentence ...
+```
+
+------------------------------------------------------------------------
+
+# DataLoader Pipeline
+
+``` text
+Raw Text
+   ↓
+Tokenizer (BPE)
+   ↓
+Token IDs
+   ↓
+Input–Target Pairs
+   ↓
+Dataset
+   ↓
+DataLoader
+   ↓
+Training Loop
+```
+
+------------------------------------------------------------------------
+
+# Key Takeaways
+
+-   BPE is a subword tokenization algorithm.
+-   Frequent words remain whole.
+-   Rare words are broken into meaningful pieces.
+-   BPE builds vocabulary by repeatedly merging frequent symbol pairs.
+-   GPT models typically use BPE-style tokenizers.
+-   After tokenization, token sequences become input--target pairs for
+    next-token prediction.
+-   A DataLoader efficiently feeds these batches into the model during
+    training.
+
+
 
