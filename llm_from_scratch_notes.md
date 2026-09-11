@@ -2334,4 +2334,161 @@ Training Loop
     training.
 
 
+    # Lecture 10 & 11 --- Token Embeddings and Positional Embeddings
+
+GitHub-friendly notes based on handwritten notes.
+
+## What are Token Embeddings?
+
+A token embedding converts a token ID into a dense vector representation
+that captures semantic meaning.
+
+### Why?
+
+Token IDs are only integers:
+
+``` text
+Dog → 23
+Cat → 31
+Apple → 1
+Banana → 38
+```
+
+The embedding layer maps them to vectors that the model can learn from.
+
+## Similar words have similar vectors
+
+During training, related words become close together in embedding space.
+
+  Dog       Cat
+  --------- ---------
+  Similar   Similar
+
+  Apple     Banana
+  --------- ---------
+  Similar   Similar
+
+## How embeddings are created
+
+1.  Randomly initialize the embedding matrix.
+2.  Train with backpropagation.
+3.  Optimize vectors during LLM training.
+
+## Embedding Matrix
+
+GPT-2 Small:
+
+-   Vocabulary: **50,257**
+-   Embedding dimension: **768**
+
+Matrix shape:
+
+``` text
+50,257 × 768
+```
+
+Every row stores one token's vector.
+
+## Word2Vec
+
+Word2Vec learned 300-dimensional vectors from Google's news dataset and
+introduced the idea that similar words have similar vectors.
+
+## Embedding Layer vs Linear Layer
+
+  Embedding Layer   Linear Layer
+  ----------------- -----------------------
+  Lookup            Matrix multiplication
+  Efficient         Less efficient
+
+------------------------------------------------------------------------
+
+# Lecture 11 --- Positional Embeddings
+
+## Why positional information?
+
+The same token receives the same embedding regardless of position.
+
+Example:
+
+``` text
+"The cat sat."
+
+"The cat slept."
+```
+
+The model therefore needs extra positional information.
+
+## Two types
+
+``` text
+Positional Embeddings
+├── Absolute
+└── Relative
+```
+
+### Absolute
+
+Each position has its own learnable embedding.
+
+``` text
+Input Embedding =
+Token Embedding +
+Position Embedding
+```
+
+Example shapes:
+
+``` text
+Token:    (8 × 256)
+Position: (8 × 256)
+Output:   (8 × 256)
+```
+
+PyTorch uses broadcasting to perform this efficiently.
+
+### Relative
+
+The model learns distances between tokens instead of fixed positions.
+
+Example:
+
+``` text
+cat is two tokens away from sat
+```
+
+This often generalizes better to long sequences.
+
+## Which does GPT use?
+
+GPT models use **learnable absolute positional embeddings** that are
+optimized during training.
+
+## Complete Pipeline
+
+``` text
+Token IDs
+   ↓
+Token Embedding
+   +
+Position Embedding
+   ↓
+Input Embedding
+   ↓
+Transformer Layers
+```
+
+## Key Takeaways
+
+-   Token embeddings capture semantic meaning.
+-   Similar words receive similar vectors.
+-   Embedding matrices are learned during training.
+-   GPT-2 Small uses a 50,257 × 768 embedding matrix.
+-   Positional embeddings inject word-order information.
+-   Absolute embeddings encode fixed positions.
+-   Relative embeddings encode distances.
+-   GPT uses learnable absolute positional embeddings.
+
+
+
 
