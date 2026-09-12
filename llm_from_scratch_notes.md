@@ -2491,4 +2491,121 @@ Transformer Layers
 
 
 
+Lecture 12 --- Attention Mechanism Introduction
+Why was Attention introduced?
+Before Transformers, machine translation relied on Encoder--Decoder
+RNNs.
+These models worked well for short sentences but struggled with long
+sequences because the decoder depended on a single hidden state from the
+encoder.
+Attention solved this by allowing the decoder to dynamically focus on
+relevant input tokens while generating each output token.
+Four Types of Attention
+Type                        Purpose
+---
+Simplified Self-Attention   Basic intuition
+Self-Attention              Learns relationships within one sequence
+Causal Attention            Prevents looking at future tokens
+Multi-Head Attention        Learns multiple relationships simultaneously
+Why Word-by-Word Translation Fails
+German:
+> Kannst du mir helfen, diesen Satz zu übersetzen?
+Correct English:
+> Can you help me translate this sentence?
+Translation requires context and grammar rather than literal
+word-by-word replacement.
+Encoder--Decoder Architecture
+``` text
+Input Sentence
+      │
+      ▼
+   Encoder
+      │
+      ▼
+ Hidden State
+      │
+      ▼
+   Decoder
+      │
+      ▼
+Output Sentence
+```
+The encoder processes the sentence sequentially and builds a hidden
+representation.
+The decoder generates the output using that representation.
+RNN Limitation
+``` text
+Word1 → Hidden1
+          │
+Word2 → Hidden2
+          │
+Word3 → Hidden3
+```
+As sentences become longer, earlier information is compressed and may be
+lost.
+How Attention Helps
+Instead of relying on one hidden state, the decoder can revisit every
+input token.
+``` text
+Input Tokens
+A  B  C  D  E
+│  │  │  │  │
+└──┴──┼──┴──┘
+      ▼
+    Decoder
+```
+The model learns attention weights that determine which words matter
+most.
+Dynamic Focus
+At each decoding step the model shifts its focus.
+Example:
+Step 1 → Subject
+Step 2 → Verb
+Step 3 → Object
+Self-Attention
+Self-attention allows every token to attend to every other token in the
+same sequence.
+Example:
+"The cat sat on the mat."
+While processing sat, the model can attend to The, cat,
+on, and mat.
+Why is it called Self?
+The sequence attends to itself.
+``` text
+A ↔ B
+A ↔ C
+A ↔ D
+B ↔ C
+...
+```
+Traditional Attention vs Self-Attention
+Traditional Attention   Self-Attention
+---
+Encoder ↔ Decoder       One sequence
+Two sequences           One sequence
+Used in translation     Core of Transformers
+Progression to GPT
+``` text
+RNN
+ ↓
+Encoder–Decoder
+ ↓
+Attention
+ ↓
+Self-Attention
+ ↓
+Transformer
+ ↓
+GPT
+```
+Key Takeaways
+Encoder--Decoder RNNs struggled with long sentences.
+Attention lets the decoder revisit the entire input sequence.
+Attention weights determine token importance.
+Self-attention allows every token to interact with every other
+token.
+Self-attention is the foundation of Transformer-based LLMs such as
+GPT.
+
+
 
