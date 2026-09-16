@@ -2336,7 +2336,6 @@ Training Loop
 
     # Lecture 10 & 11 --- Token Embeddings and Positional Embeddings
 
-GitHub-friendly notes based on handwritten notes.
 
 ## What are Token Embeddings?
 
