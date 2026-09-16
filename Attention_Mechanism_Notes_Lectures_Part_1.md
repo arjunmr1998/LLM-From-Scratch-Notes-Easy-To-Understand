@@ -1,6 +1,5 @@
-# LLM From Scratch --- Attention Mechanism Notes (Lectures 12--14)
+# LLM From Scratch --- Attention Mechanism Notes 
 
-Clean GitHub-friendly notes.
 
 ## Attention Types
 
