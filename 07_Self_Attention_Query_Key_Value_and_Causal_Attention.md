@@ -1,8 +1,8 @@
-# LLM From Scratch --- Self-Attention with Query, Key & Value 
+# Self-Attention with Query, Key & Value 
 
 
 
-## Lecture 15 --- Scaled Dot-Product Attention
+## Scaled Dot-Product Attention
 
 ### Goal
 
